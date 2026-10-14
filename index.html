@@ -1,0 +1,2160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>耐科便当盒全品类智能选型与外贸阶梯报价平台 · Naike Bento CPQ Studio</title>
+<meta name="description" content="晋江市耐克礼品玩具有限公司 (Naike Tableware / www.custombentofactory.com) 官方 B2B 智能选型与外贸阶梯报价平台。涵盖儿童防漏便当盒、微波304不锈钢盒、小麦秸秆环保餐盒、沙拉大碗、保温餐包等品类，提供自然语言需求解析、2D结构工程图、BOM材料清单、注塑工时、FOB厦门阶梯核价与英文报价单导出。">
+<link rel="icon" href="images/logo.png" type="image/png">
+<!-- Google Fonts & FontAwesome -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* ==========================================================================
+   Naike Tableware CPQ Platform - Design System
+   ========================================================================== */
+:root {
+  --bg: #eef2f7;
+  --card: #ffffff;
+  --ink: #0f172a;
+  --ink-2: #475569;
+  --ink-3: #94a3b8;
+  --line: #e2e8f0;
+  --brand-teal: #008290;
+  --brand-teal-light: #0ea5b6;
+  --brand-teal-glow: rgba(0, 130, 144, 0.25);
+  --accent: #008290;
+  --accent-2: #0284c7;
+  --ok: #16a34a;
+  --warn: #d97706;
+  --danger: #dc2626;
+  --sidebar-w: 280px;
+  --radius: 12px;
+  --shadow: 0 1px 3px rgba(15, 23, 42, .08), 0 8px 24px rgba(15, 23, 42, .06);
+  --mono: 'JetBrains Mono', 'Consolas', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+
+body {
+  font-family: 'Plus Jakarta Sans', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background:
+    radial-gradient(1200px 600px at 85% -10%, rgba(0, 130, 144, .08), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgba(2, 132, 199, .06), transparent 60%),
+    var(--bg);
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+#app { display: flex; min-height: 100vh; }
+
+/* ---------- 侧边栏 ---------- */
+#sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  background: linear-gradient(180deg, #09121a 0%, #0f1d27 40%, #132433 100%);
+  color: #cbd5e1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 16px 18px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 20;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 6px 16px;
+  border-bottom: 1px solid rgba(148, 163, 184, .18);
+}
+.brand-logo-img {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 4px;
+  object-fit: contain;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .3);
+}
+.brand-text { display: flex; flex-direction: column; min-width: 0; }
+.brand-text strong {
+  color: #f8fafc;
+  font-size: 16px;
+  letter-spacing: .3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.brand-text span {
+  color: var(--brand-teal-light);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+.sidebar-sec {
+  color: #718096;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 14px 8px 6px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+#steps {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  overflow-y: auto;
+}
+#steps::-webkit-scrollbar { width: 4px; }
+#steps::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 2px; }
+
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all .18s;
+  user-select: none;
+}
+.step-item:hover { background: rgba(148, 163, 184, .08); }
+.step-item.active {
+  background: rgba(0, 130, 144, .2);
+  border-color: rgba(14, 165, 182, .5);
+}
+.step-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(148, 163, 184, .14);
+  color: #94a3b8;
+  font-weight: 700;
+  font-size: 12px;
+  font-family: var(--mono);
+}
+.step-item.active .step-num {
+  background: var(--brand-teal);
+  color: #fff;
+  box-shadow: 0 0 0 3px rgba(14, 165, 182, .3);
+}
+.step-item.done .step-num {
+  background: var(--ok);
+  color: #fff;
+}
+.step-txt { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.step-txt b { color: #e2e8f0; font-size: 13px; white-space: nowrap; }
+.step-txt span { color: #718096; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.mod-flag { margin-left: auto; font-size: 13px; font-weight: 700; }
+.mod-flag.done { color: #4ade80; }
+.mod-flag.stale { color: #fbbf24; }
+.mod-flag.empty { color: #475569; }
+
+.sidebar-foot {
+  border-top: 1px solid rgba(148, 163, 184, .18);
+  padding-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.company-box {
+  font-size: 11px;
+  color: #718096;
+  line-height: 1.6;
+  padding: 0 4px;
+}
+.company-box b { color: #cbd5e1; }
+
+/* ---------- 主工作区 ---------- */
+#main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0 30px 24px;
+  overflow-y: auto;
+}
+
+#topbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 24px 0 16px;
+  gap: 16px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 16px;
+}
+#stepTitle { font-size: 22px; font-weight: 800; letter-spacing: .2px; color: var(--ink); }
+#stepSubtitle { color: var(--ink-2); font-size: 13px; margin-top: 2px; }
+#topbarActions { display: flex; gap: 8px; align-items: center; }
+
+/* Stale Banner */
+.stale-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0 0 14px;
+}
+
+/* ---------- 卡片与布局 ---------- */
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px 22px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+.card h3 {
+  font-size: 14.5px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink);
+}
+.card h3 .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--brand-teal);
+  display: inline-block;
+}
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+@media (max-width: 1100px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
+
+/* 表格样式 */
+table.tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
+.tbl th {
+  text-align: left;
+  padding: 9px 10px;
+  background: #0f1d27;
+  color: #f1f5f9;
+  font-weight: 600;
+  font-size: 11.5px;
+  white-space: nowrap;
+}
+.tbl th:first-child { border-radius: 8px 0 0 0; }
+.tbl th:last-child { border-radius: 0 8px 0 0; }
+.tbl td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+.tbl tr:nth-child(even) td { background: #f8fafc; }
+.tbl tr:hover td { background: #e0f2fe; }
+.tbl .num { font-family: var(--mono); text-align: right; }
+.tbl .ctr { text-align: center; }
+.tbl-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid var(--line); }
+
+/* ---------- 徽章 ---------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.badge-customer { background: #e0f2fe; color: #0369a1; }
+.badge-ai { background: #fef3c7; color: #b45309; }
+.badge-default { background: #f1f5f9; color: #64748b; }
+.badge-missing { background: #fee2e2; color: #b91c1c; }
+.badge-stock { background: #dcfce7; color: #15803d; }
+.badge-order { background: #fef9c3; color: #a16207; }
+.badge-key { background: #fce7f3; color: #be185d; }
+.badge-info { background: #ccfbf1; color: #0f766e; }
+
+/* ---------- 表单控件 ---------- */
+label.fld {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--ink-2);
+  font-weight: 600;
+}
+input[type=text], input[type=number], select, textarea {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--ink);
+  background: #fff;
+  outline: none;
+  transition: all .15s;
+  width: 100%;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--brand-teal);
+  box-shadow: 0 0 0 3px rgba(0, 130, 144, .15);
+}
+textarea { resize: vertical; min-height: 80px; font-family: inherit; }
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px 14px;
+}
+
+/* ---------- 按钮 ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .15s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn-primary {
+  background: var(--brand-teal);
+  color: #fff;
+}
+.btn-primary:hover:not(:disabled) {
+  background: #006c78;
+  box-shadow: 0 4px 14px var(--brand-teal-glow);
+}
+.btn-secondary {
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid #cbd5e1;
+}
+.btn-secondary:hover { border-color: var(--brand-teal); color: var(--brand-teal); }
+.btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(148, 163, 184, .35);
+  color: #cbd5e1;
+}
+.btn-ghost:hover { border-color: var(--brand-teal-light); color: #fff; }
+.btn-sm { padding: 5px 10px; font-size: 12px; border-radius: 6px; }
+.btn-block { width: 100%; }
+
+/* ---------- 提示框 ---------- */
+.alert {
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 12.5px;
+  margin-bottom: 14px;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.alert-warn { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
+.alert-danger { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+.alert-info { background: #f0fdfa; border: 1px solid #99f6e4; color: #0f766e; }
+.alert-ok { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+
+/* ---------- 统计指标卡 ---------- */
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+.stat {
+  background: linear-gradient(160deg, #f8fafc, #eef2f7);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.stat .k { font-size: 11px; color: var(--ink-2); font-weight: 600; }
+.stat .v {
+  font-family: var(--mono);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-top: 2px;
+}
+.stat .v small { font-size: 12px; color: var(--ink-3); font-weight: 500; }
+.stat.accent {
+  background: linear-gradient(160deg, #093740, #008290);
+  border-color: transparent;
+}
+.stat.accent .k { color: #a5f3fc; }
+.stat.accent .v { color: #fff; }
+
+/* ---------- 2D SVG 预览 ---------- */
+.svg-stage {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px;
+  overflow-x: auto;
+}
+.svg-stage svg { display: block; width: 100%; min-width: 580px; }
+
+.chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  background: #f1f5f9;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 12px;
+}
+.chip b { font-family: var(--mono); color: var(--brand-teal); font-size: 13px; }
+
+/* ---------- 邮件预览 ---------- */
+.email-pane { background: #fbfdff; border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+.email-meta { font-size: 12px; color: var(--ink-2); margin-bottom: 8px; word-break: break-all; }
+pre.email-body {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 420px;
+  overflow-y: auto;
+  color: #1e293b;
+}
+
+/* ---------- Toast 提示 ---------- */
+.toast {
+  position: fixed;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #0f172a;
+  color: #f1f5f9;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all .25s;
+  z-index: 999;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, .25);
+  max-width: 80vw;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.err { background: #991b1b; }
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 900px) {
+  #app { flex-direction: column; }
+  #sidebar {
+    width: 100%;
+    height: auto;
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 12px 16px;
+    gap: 10px;
+  }
+  #steps { flex-direction: row; overflow-x: auto; margin-top: 0; gap: 6px; }
+  .step-item { padding: 6px 10px; }
+  .step-txt span { display: none; }
+  .sidebar-foot { border-top: none; padding-top: 0; flex-direction: row; align-items: center; }
+  .company-box { display: none; }
+  #main { padding: 0 14px 18px; }
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <!-- SIDEBAR NAVIGATION -->
+  <aside id="sidebar">
+    <div class="brand">
+      <img src="images/logo.png" alt="Naike Tableware" class="brand-logo-img">
+      <div class="brand-text">
+        <strong>Naike Tableware</strong>
+        <span>耐科出海智能报价平台</span>
+      </div>
+    </div>
+    <div class="sidebar-sec">6 大核心核价模块 · 实时联动</div>
+    <nav id="mods"></nav>
+    <div class="sidebar-foot">
+      <button id="btnDemo" class="btn btn-ghost btn-block">⚡ 载入大客户询盘用例</button>
+      <button id="btnCalcAll" class="btn btn-primary btn-block">⚙ 计算全套核价方案</button>
+      <div id="companyBox" class="company-box">
+        <b>晋江市耐克礼品玩具有限公司</b><br>
+        Disney FAMA: W128-4829-1 • Coca-Cola SGP<br>
+        厦门港 (XMN) 60km • info@naikegroup.com
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN VIEWPORT -->
+  <main id="main">
+    <header id="topbar">
+      <div id="stepTitleWrap">
+        <h1 id="stepTitle">1. 参数标准化与补全</h1>
+        <p id="stepSubtitle">将海外买家自然语言询盘转化为标准制造规格</p>
+      </div>
+      <div id="topbarActions"></div>
+    </header>
+    <div id="staleBanner"></div>
+    <section id="content"></section>
+  </main>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<!-- ==========================================================================
+   NAIKE BENTO CPQ CORE ENGINE (Pure Client-Side Implementation)
+   ========================================================================== -->
+<script>
+'use strict';
+
+/* --- 1. Product Categories & Tooling Database --- */
+const NAIKE_CATEGORIES = [
+  {
+    id: 'kids-5-bento',
+    name: '儿童5格防漏便当盒',
+    nameEn: 'Bentgo-Grade Kids 5-Compartment Bento',
+    sku: 'NK-KB5-001',
+    moq: 1000,
+    dims: { l: 215, w: 165, h: 50 },
+    volMl: 1000,
+    compartments: 5,
+    stdMaterial: '食品级 PP5 + TPE 防摔橡胶包边',
+    sealType: 'LSR 液态铂金硅胶分格一体密封',
+    carton: { l: 54, w: 38, h: 42, pcs: 24, gw: 14.5 },
+    img: 'images/eazylunch_kids_5_bento.jpg',
+    basePriceFob: 2.35,
+    leadDays: 20
+  },
+  {
+    id: 'chill-icepack-bento',
+    name: '可注水保冷便当盒 (带冷凝托盘)',
+    nameEn: 'Chill Bento with Freeze Ice Pack Tray',
+    sku: 'NK-CHL-002',
+    moq: 1000,
+    dims: { l: 220, w: 170, h: 55 },
+    volMl: 1100,
+    compartments: 4,
+    stdMaterial: '食品级 PP5 + 无毒冷凝凝胶层',
+    sealType: '双唇液态硅胶密封圈',
+    carton: { l: 48, w: 36, h: 28, pcs: 16, gw: 12.0 },
+    img: 'images/eazylunch_chill_icepack_bento.jpg',
+    basePriceFob: 2.65,
+    leadDays: 22
+  },
+  {
+    id: 'microwave-sus304',
+    name: '黑科技可微波 304 不锈钢便当盒',
+    nameEn: 'Next-Gen Microwave-Safe SUS 304 Bento',
+    sku: 'NK-MSS-008',
+    moq: 1000,
+    dims: { l: 220, w: 155, h: 60 },
+    volMl: 1200,
+    compartments: 3,
+    stdMaterial: '食品级 18/8 SUS 304 + ABS 防烫外壳',
+    sealType: '四边强力卡扣 + LSR 铂金硅胶垫圈',
+    carton: { l: 48, w: 35, h: 39, pcs: 24, gw: 13.2 },
+    img: 'images/microwave_stainless_bento_hero.jpg',
+    basePriceFob: 3.90,
+    leadDays: 25
+  },
+  {
+    id: 'stackable-2tier',
+    name: '日式双层手提成人便当盒',
+    nameEn: 'Stackable Dual-Tier All-in-One Bento',
+    sku: 'NK-STK2-004',
+    moq: 1000,
+    dims: { l: 185, w: 105, h: 110 },
+    volMl: 1200,
+    compartments: 2,
+    stdMaterial: '高韧性 Food PP + 高弹耐磨尼龙绑带',
+    sealType: '中层隔热密封盖 + 硅胶排气阀',
+    carton: { l: 46, w: 39, h: 28, pcs: 24, gw: 10.8 },
+    img: 'images/eazylunch_stackable_2tier_bento.jpg',
+    basePriceFob: 2.15,
+    leadDays: 20
+  },
+  {
+    id: 'eco-wheatstraw',
+    name: '天然小麦秸秆环保三格盒',
+    nameEn: 'Eco Wheat Straw Bio-Composite Bento',
+    sku: 'NK-WS3-006',
+    moq: 1000,
+    dims: { l: 205, w: 130, h: 70 },
+    volMl: 1000,
+    compartments: 3,
+    stdMaterial: '40% 天然生物质小麦秸秆 + 60% 食品 PP',
+    sealType: '嵌入式环保食品硅胶密封',
+    carton: { l: 44, w: 42, h: 46, pcs: 36, gw: 11.5 },
+    img: 'images/wheat_straw_bento_box.jpg',
+    basePriceFob: 1.68,
+    leadDays: 18
+  },
+  {
+    id: 'heavy-sus304',
+    name: '重装 304 不锈钢三格盒',
+    nameEn: 'Heavy-Duty SUS 304 3-Compartment Bento',
+    sku: 'NK-SS3-003',
+    moq: 1000,
+    dims: { l: 230, w: 175, h: 55 },
+    volMl: 1000,
+    compartments: 3,
+    stdMaterial: '纯正 18/8 SUS 304 不锈钢 (零塑料食物接触)',
+    sealType: '双侧金属搭扣 + 可拆卸食品硅胶圈',
+    carton: { l: 50, w: 38, h: 32, pcs: 20, gw: 13.8 },
+    img: 'images/eazylunch_stainless_3_bento.jpg',
+    basePriceFob: 3.85,
+    leadDays: 25
+  },
+  {
+    id: 'viral-snackle',
+    name: 'TikTok 爆款八格便携零食盒',
+    nameEn: 'Viral Snackle Box Charcuterie To-Go',
+    sku: 'NK-SNK-007',
+    moq: 1000,
+    dims: { l: 310, w: 235, h: 65 },
+    volMl: 2200,
+    compartments: 8,
+    stdMaterial: '高透食品 PET/PP + 便携加宽提手',
+    sealType: '卡扣式防潮全域密封硅胶条',
+    carton: { l: 51, w: 34, h: 44, pcs: 12, gw: 7.8 },
+    img: 'images/snackle_box_hero.jpg',
+    basePriceFob: 2.25,
+    leadDays: 20
+  },
+  {
+    id: 'salad-bento-bowl',
+    name: '54oz 超大容量沙拉保鲜大碗',
+    nameEn: '54oz Leak-Proof Salad Bento Bowl',
+    sku: 'NK-SLD-005',
+    moq: 1000,
+    dims: { l: 195, w: 195, h: 115 },
+    volMl: 1600,
+    compartments: 4,
+    stdMaterial: '深碗加厚 Food PP + 独立果仁分格层',
+    sealType: '顶盖 4 卡扣密封 + 独立调料酱汁杯',
+    carton: { l: 61, w: 41.5, h: 38.5, pcs: 18, gw: 9.2 },
+    img: 'images/salad_bento_bowl_hero.jpg',
+    basePriceFob: 2.30,
+    leadDays: 20
+  },
+  {
+    id: 'insulated-bag',
+    name: '600D rPET 环保保温便当包',
+    nameEn: '600D rPET Insulated Thermal Lunch Bag',
+    sku: 'NK-BAG-010',
+    moq: 1000,
+    dims: { l: 260, w: 200, h: 95 },
+    volMl: 4800,
+    compartments: 1,
+    stdMaterial: '600D 再生聚酯面料 + 加厚铝箔珍珠棉',
+    sealType: '双向防咬布拉链',
+    carton: { l: 55, w: 43, h: 36, pcs: 40, gw: 10.5 },
+    img: 'images/insulated_lunch_bag.jpg',
+    basePriceFob: 2.10,
+    leadDays: 22
+  }
+];
+
+/* --- 2. ERP Raw Materials Master Table --- */
+let RAW_MATERIALS = {
+  pp_resin: { id: 'MAT-PP-01', name: '食品级高抗冲 PP5 粒料', spec: 'Virgin Food-Grade PP', unit: 'kg', price: 9.8, stock: true },
+  sus304_plate: { id: 'MAT-SS-02', name: '18/8 SUS 304 不锈钢卷板', spec: 'SUS304 0.6mm', unit: 'kg', price: 18.5, stock: true },
+  wheat_straw_compound: { id: 'MAT-WS-03', name: '小麦秸秆生物基改性树脂', spec: '40% Bio-Fiber', unit: 'kg', price: 11.2, stock: true },
+  lsr_silicone: { id: 'MAT-SIL-04', name: '液态铂金硅胶', spec: 'LSR 40 Shore A', unit: 'kg', price: 28.0, stock: true },
+  tpe_resin: { id: 'MAT-TPE-05', name: '耐摔缓冲包胶 TPE 胶粒', spec: 'Food Safe TPE', unit: 'kg', price: 16.5, stock: true },
+  pantone_color: { id: 'MAT-COL-06', name: '定制 Pantone 环保色母', spec: 'Custom Masterbatch', unit: 'kg', price: 32.0, stock: false },
+  gift_box: { id: 'MAT-BOX-07', name: '单只独立彩盒 (E坑瓦楞)', spec: '350g White Cardboard', unit: '件', price: 0.85, stock: true },
+  poly_bag: { id: 'MAT-BAG-08', name: '环保生物防尘内袋 (PE/CPE)', spec: 'Thickness 0.03mm', unit: '件', price: 0.12, stock: true },
+  export_carton: { id: 'MAT-CTN-09', name: '5层高强瓦楞外贸纸箱 (K=K)', spec: '5-Ply Corrugated', unit: '件', price: 4.80, stock: true }
+};
+
+/* --- 3. Process Labor Routes & Machine Rates --- */
+let PROCESS_ROUTES = [
+  { code: 'INJ', name: '高速伺服精密注塑', desc: '外壳、内盘与卡扣注塑成型 (单模多穴)', setupMin: 45, cycleSec: 25, machineRateHr: 130, keyNode: true },
+  { code: 'LSR', name: '液态硅胶密封注塑/装配', desc: '双色模包胶或铂金硅胶条热固化嵌入', setupMin: 30, cycleSec: 15, machineRateHr: 120, keyNode: false },
+  { code: 'STAMP', name: '不锈钢冲压拉伸/电解', desc: '内胆冲压、卷边钝化与电解抛光 (钢款)', setupMin: 60, cycleSec: 35, machineRateHr: 140, keyNode: true },
+  { code: 'LOGO', name: 'Logo 定制印刷/激光打标', desc: '单色/多色丝印、移印或激光雕刻', setupMin: 20, cycleSec: 10, machineRateHr: 95, keyNode: false },
+  { code: 'ASSY', name: '锁扣铆合与手工精装配', desc: '卡扣测试、密封性闭合与毛边修整', setupMin: 15, cycleSec: 30, machineRateHr: 80, keyNode: false },
+  { code: 'TEST', name: '真空防漏与水泥跌落质检', desc: '-50kPa 负压保压与 2 米跌落抗震抽检', setupMin: 20, cycleSec: 12, machineRateHr: 85, keyNode: false },
+  { code: 'PACK', name: '单品彩盒入袋与装箱打托', desc: '干燥剂放入、说明书折页、外箱封箱', setupMin: 15, cycleSec: 20, machineRateHr: 75, keyNode: false }
+];
+
+/* --- 4. Modules Definition --- */
+const MODULES = [
+  { n: 1, t: '参数标准化与补全', s: '自然语言询盘 → 确定性工程规格' },
+  { n: 2, t: '图形化方案与透视', s: '2D 截面剖视工程图 + 关键尺寸标注' },
+  { n: 3, t: '选型与 BOM 生成', s: '物料清单 + ERP 实时原辅料联动' },
+  { n: 4, t: '工艺路线与工时', s: '注塑节拍 + 制造工时系数人工校准' },
+  { n: 5, t: '成本核算与阶梯报价', s: 'FOB 厦门阶梯报价 (1k/3k/5k/10k)' },
+  { n: 6, t: '外贸响应包导出', s: '英文邮件草稿 + 形式发票 (PI) PDF' }
+];
+
+/* --- 5. Bestseller Customer Inquiry Demos --- */
+const DEMOS = [
+  '我们需要定制 3000 套儿童 5 格防漏便当盒，要求 Pantone 320C 薄荷绿，上盖丝印白色品牌 Logo，单套独立彩盒包装，做 100% 防漏测试，FOB 厦门港交货。',
+  '采购黑科技可微波 304 不锈钢便当盒 5000 套，三格分餐，激光打标 Logo，带食品级硅胶密封圈，满足德国 LFGB 食品安全标准，包装用标准 5 层外销纸箱。',
+  'TikTok 爆款八格便携零食盒 2000 个，高透盖子，手提带把手，定制彩卡包装，请报 FOB 厦门单价与交期。',
+  '600D 再生环保 rPET 保温餐包 4000 个，加厚铝箔保温 4 小时以上，热转印彩色图案 Logo，单独 PE 袋包装。'
+];
+
+/* --- 6. Application State --- */
+const state = {
+  tab: 1,
+  text: '',
+  form: {},
+  categoryId: 'kids-5-bento',
+  profitRate: 22, // 22% 利润率
+  shopRate: 110,  // 平均车间费率 ¥110/小时
+  params: [],
+  issues: [],
+  scheme: null,
+  dirty: false,
+  processOverrides: {},
+  costOverrides: {},
+  to: 'procurement@target.com',
+  usdRate: 7.20 // USD/CNY 汇率
+};
+
+const $ = id => document.getElementById(id);
+
+function esc(s) {
+  return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function fmt(n, d = 2) {
+  return new Intl.NumberFormat('zh-CN', { minimumFractionDigits: d, maximumFractionDigits: d }).format(n ?? 0);
+}
+function toast(msg, isErr = false) {
+  const el = $('toast');
+  el.textContent = msg;
+  el.className = 'toast show' + (isErr ? ' err' : '');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => { el.className = 'toast'; }, 2600);
+}
+
+/* ==========================================================================
+   ENGINE: M1 ~ M6 CALCULATION PIPELINE
+   ========================================================================== */
+
+/* --- M1: Natural Language Inquiry Parser & Completer --- */
+function parseInquiry(text, formOverride = {}, targetCategory = null) {
+  let cat = targetCategory;
+  if (!cat) {
+    if (/微波|不锈钢|304|steel/i.test(text)) cat = 'microwave-sus304';
+    else if (/冰袋|保冷|冷凝|chill/i.test(text)) cat = 'chill-icepack-bento';
+    else if (/零食|八格|snackle/i.test(text)) cat = 'viral-snackle';
+    else if (/沙拉|大碗|salad/i.test(text)) cat = 'salad-bento-bowl';
+    else if (/双层|手提|stackable/i.test(text)) cat = 'stackable-2tier';
+    else if (/小麦|秸秆|eco|straw/i.test(text)) cat = 'eco-wheatstraw';
+    else if (/保温包|餐包|bag|cooler/i.test(text)) cat = 'insulated-bag';
+    else cat = 'kids-5-bento';
+  }
+
+  const categoryObj = NAIKE_CATEGORIES.find(c => c.id === cat) || NAIKE_CATEGORIES[0];
+
+  // Qty detection
+  let qty = 3000;
+  const qm = text.match(/(\d+)\s*(?:套|个|件|pcs|PCS)/i);
+  if (qm) qty = parseInt(qm[1], 10);
+  else if (/1\s*万|一万/.test(text)) qty = 10000;
+
+  // Customization detection
+  const hasLogo = /logo|印|丝印|激光|打标|热转印/i.test(text);
+  const logoType = /激光/i.test(text) ? '激光打标' : /热转印/i.test(text) ? '热转印' : '丝网印刷 (单色)';
+  const colorMatch = text.match(/Pantone\s*([0-9A-Za-z]+)|薄荷绿|粉色|藏蓝|灰色|蓝色|黄色/i);
+  const colorSpec = colorMatch ? colorMatch[0] : '标准耐科蓝绿 (Pantone 320C)';
+
+  // Build values
+  const values = {
+    categoryId: categoryObj.id,
+    name: categoryObj.name,
+    nameEn: categoryObj.nameEn,
+    sku: categoryObj.sku,
+    qty: formOverride.qty !== undefined ? formOverride.qty : qty,
+    length: formOverride.length !== undefined ? formOverride.length : categoryObj.dims.l,
+    width: formOverride.width !== undefined ? formOverride.width : categoryObj.dims.w,
+    height: formOverride.height !== undefined ? formOverride.height : categoryObj.dims.h,
+    volMl: formOverride.volMl !== undefined ? formOverride.volMl : categoryObj.volMl,
+    compartments: formOverride.compartments !== undefined ? formOverride.compartments : categoryObj.compartments,
+    material: formOverride.material !== undefined ? formOverride.material : categoryObj.stdMaterial,
+    sealType: formOverride.sealType !== undefined ? formOverride.sealType : categoryObj.sealType,
+    customColor: formOverride.customColor !== undefined ? formOverride.customColor : colorSpec,
+    logoProcess: formOverride.logoProcess !== undefined ? formOverride.logoProcess : (hasLogo ? logoType : '激光刻印/无印刷'),
+    foodCert: formOverride.foodCert !== undefined ? formOverride.foodCert : 'US FDA 21 CFR 177.1520 & LFGB §30/31',
+    port: 'FOB 厦门港 (XMN, China)',
+    carton: categoryObj.carton,
+    img: categoryObj.img
+  };
+
+  // Structured Parameter tracking
+  const params = [
+    { label: '基准品类', value: values.name, unit: '—', source: 'customer', note: `型号 SKU: ${values.sku}` },
+    { label: '采购数量', value: values.qty, unit: '套', source: qm ? 'customer' : 'default', note: '起订量 MOQ 1,000 套起' },
+    { label: '产品外形尺寸', value: `${values.length} × ${values.width} × ${values.height}`, unit: 'mm', source: 'ai', note: '精密注塑钢模尺寸' },
+    { label: '额定容量', value: values.volMl, unit: 'ml', source: 'ai', note: '多格独立控量容积' },
+    { label: '分格数量', value: `${values.compartments} 格`, unit: '格', source: 'ai', note: '独立干湿隔离分仓' },
+    { label: '主材规格', value: values.material, unit: '—', source: 'default', note: '100% 食品级 BPA Free' },
+    { label: '密封技术', value: values.sealType, unit: '—', source: 'ai', note: '耐科液态铂金硅胶气密专利' },
+    { label: '定制外观色标', value: values.customColor, unit: '—', source: colorMatch ? 'customer' : 'default', note: '支持 Pantone 潘通色卡对色' },
+    { label: 'Logo 定制工艺', value: values.logoProcess, unit: '—', source: hasLogo ? 'customer' : 'default', note: '外贸高耐磨不掉字标准' },
+    { label: '食品合规标准', value: values.foodCert, unit: '—', source: 'default', note: 'SGS / Intertek 第三方出海认证' },
+    { label: '交货港口', value: values.port, unit: '—', source: 'default', note: '晋江工厂距厦门港仅 60km (1h集港)' }
+  ];
+
+  const issues = [];
+  if (values.qty < categoryObj.moq) {
+    issues.push(`提示：当前定制数量 ${values.qty} 套低于工厂标准起订量 ${categoryObj.moq} 套，建议增加批量以平摊模具换型与开机费。`);
+  }
+  if (!colorMatch) {
+    issues.push(`未指定 Pantone 色号，已默认推荐耐科经典标准色，大货支持客户指定 Pantone 对色。`);
+  }
+
+  return { values, params, issues, categoryObj };
+}
+
+/* --- M2: 2D SVG Blueprint & Cross-Section Generator --- */
+function generateSvgBlueprint(values) {
+  const W = 620, H = 280;
+  const L = values.length, w = values.width, h = values.height;
+  const comps = values.compartments;
+
+  // Scale box inside SVG view
+  const boxW = 380, boxH = 150;
+  const x0 = 80, y0 = 65;
+
+  let compBars = '';
+  const segW = boxW / comps;
+  for (let i = 1; i < comps; i++) {
+    const cx = x0 + i * segW;
+    compBars += `
+      <line x1="${cx}" y1="${y0 + 10}" x2="${cx}" y2="${y0 + boxH - 12}" stroke="#008290" stroke-width="3" stroke-dasharray="2 1"/>
+      <circle cx="${cx}" cy="${y0 + 8}" r="3" fill="#008290"/>
+    `;
+  }
+
+  // Latches on left and right
+  const latchLeft = `<rect x="${x0 - 14}" y="${y0 + 35}" width="14" height="42" rx="4" fill="#0284c7" stroke="#004e75" stroke-width="1.5"/>
+                     <circle cx="${x0 - 7}" cy="${y0 + 56}" r="3" fill="#fff"/>`;
+  const latchRight = `<rect x="${x0 + boxW}" y="${y0 + 35}" width="14" height="42" rx="4" fill="#0284c7" stroke="#004e75" stroke-width="1.5"/>
+                      <circle cx="${x0 + boxW + 7}" cy="${y0 + 56}" r="3" fill="#fff"/>`;
+
+  const isStainless = /304|stainless/i.test(values.categoryId);
+  const outerFill = isStainless ? 'url(#steelGrad)' : 'url(#boxGrad)';
+
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="100%">
+      <defs>
+        <linearGradient id="boxGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#008290" stop-opacity="0.12"/>
+          <stop offset="100%" stop-color="#008290" stop-opacity="0.32"/>
+        </linearGradient>
+        <linearGradient id="steelGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#cbd5e1"/>
+          <stop offset="50%" stop-color="#f8fafc"/>
+          <stop offset="100%" stop-color="#94a3b8"/>
+        </linearGradient>
+        <marker id="dimArr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,1 L9,5 L0,9 z" fill="#e11d48"/>
+        </marker>
+      </defs>
+
+      <!-- Frame & Grid Background -->
+      <rect width="${W}" height="${H}" fill="#ffffff" rx="8"/>
+      <rect x="12" y="12" width="${W - 24}" height="${H - 24}" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+
+      <!-- Outer Box Profile -->
+      <rect x="${x0}" y="${y0}" width="${boxW}" height="${boxH}" rx="14" fill="${outerFill}" stroke="#008290" stroke-width="2.5"/>
+
+      <!-- Silicone Hermetic Gasket Channel (Top seal) -->
+      <rect x="${x0 + 4}" y="${y0 + 5}" width="${boxW - 8}" height="8" rx="3" fill="#38bdf8" opacity="0.8"/>
+      <text x="${x0 + boxW / 2}" y="${y0 - 8}" font-size="11" font-weight="700" fill="#0284c7" text-anchor="middle">LSR 铂金硅胶分格一体密封槽 (0 泄漏气密腔)</text>
+
+      <!-- Inner Compartment Dividers -->
+      ${compBars}
+
+      <!-- Latches -->
+      ${latchLeft}
+      ${latchRight}
+
+      <!-- Center Logo Imprint Area -->
+      <rect x="${x0 + boxW / 2 - 45}" y="${y0 + boxH / 2 - 14}" width="90" height="28" rx="4" fill="#ffffff" opacity="0.85" stroke="#94a3b8" stroke-dasharray="3 2"/>
+      <text x="${x0 + boxW / 2}" y="${y0 + boxH / 2 + 4}" font-size="11" font-weight="700" fill="#0f172a" text-anchor="middle">${esc(values.logoProcess)}</text>
+
+      <!-- TPE Shockproof Bumper Corners -->
+      <path d="M${x0},${y0 + 20} Q${x0},${y0} ${x0 + 20},${y0}" fill="none" stroke="#f97316" stroke-width="6"/>
+      <path d="M${x0 + boxW - 20},${y0} Q${x0 + boxW},${y0} ${x0 + boxW},${y0 + 20}" fill="none" stroke="#f97316" stroke-width="6"/>
+      <path d="M${x0},${y0 + boxH - 20} Q${x0},${y0 + boxH} ${x0 + 20},${y0 + boxH}" fill="none" stroke="#f97316" stroke-width="6"/>
+      <path d="M${x0 + boxW - 20},${y0 + boxH} Q${x0 + boxW},${y0 + boxH} ${x0 + boxW},${y0 + boxH - 20}" fill="none" stroke="#f97316" stroke-width="6"/>
+
+      <!-- Dimension Lines (Red) -->
+      <!-- Length Dimension -->
+      <line x1="${x0}" y1="${y0 + boxH + 24}" x2="${x0 + boxW}" y2="${y0 + boxH + 24}" stroke="#e11d48" stroke-width="1.2" marker-start="url(#dimArr)" marker-end="url(#dimArr)"/>
+      <line x1="${x0}" y1="${y0 + boxH + 8}" x2="${x0}" y2="${y0 + boxH + 30}" stroke="#e11d48" stroke-width="0.8"/>
+      <line x1="${x0 + boxW}" y1="${y0 + boxH + 8}" x2="${x0 + boxW}" y2="${y0 + boxH + 30}" stroke="#e11d48" stroke-width="0.8"/>
+      <text x="${x0 + boxW / 2}" y="${y0 + boxH + 38}" font-size="12" font-weight="700" fill="#e11d48" text-anchor="middle">长度 L: ${L} mm</text>
+
+      <!-- Height Dimension (Vertical on right) -->
+      <line x1="${x0 + boxW + 36}" y1="${y0}" x2="${x0 + boxW + 36}" y2="${y0 + boxH}" stroke="#e11d48" stroke-width="1.2" marker-start="url(#dimArr)" marker-end="url(#dimArr)"/>
+      <line x1="${x0 + boxW + 20}" y1="${y0}" x2="${x0 + boxW + 42}" y2="${y0}" stroke="#e11d48" stroke-width="0.8"/>
+      <line x1="${x0 + boxW + 20}" y1="${y0 + boxH}" x2="${x0 + boxW + 42}" y2="${y0 + boxH}" stroke="#e11d48" stroke-width="0.8"/>
+      <text x="${x0 + boxW + 52}" y="${y0 + boxH / 2 + 4}" font-size="12" font-weight="700" fill="#e11d48" text-anchor="middle" transform="rotate(90, ${x0 + boxW + 52}, ${y0 + boxH / 2})">高度 H: ${h} mm</text>
+
+      <!-- Factory Specification Tag Block -->
+      <rect x="20" y="20" width="165" height="32" rx="4" fill="#0f1d27"/>
+      <text x="30" y="34" font-size="10" font-weight="700" fill="#0ea5b6">NAIKE ENGINEERING DRAWING</text>
+      <text x="30" y="46" font-size="9" fill="#94a3b8">DWG: ${values.sku} · ${comps} PORTIONS</text>
+    </svg>
+  `;
+  return svg;
+}
+
+/* --- M3: BOM & ERP Material Calculation --- */
+function calculateBom(values) {
+  const isSteel = /304|stainless/i.test(values.categoryId);
+  const isWheat = /wheat/i.test(values.categoryId);
+  const isBag = /bag/i.test(values.categoryId);
+
+  const rows = [];
+  let seq = 10;
+
+  // 1. Main outer body resin
+  if (!isBag) {
+    const resinKey = isWheat ? 'wheat_straw_compound' : 'pp_resin';
+    const resinItem = RAW_MATERIALS[resinKey];
+    const resinWeightKg = 0.28; // 280g resin per box
+    rows.push({
+      seq: seq++,
+      partNo: `NK-MAT-${seq}`,
+      category: 'resin',
+      name: resinItem.name,
+      spec: resinItem.spec,
+      qty: resinWeightKg,
+      unit: 'kg',
+      unitPrice: resinItem.price,
+      amount: resinWeightKg * resinItem.price,
+      stock: resinItem.stock,
+      source: '常备原料库'
+    });
+  }
+
+  // 2. Stainless Steel Tray (If applicable)
+  if (isSteel) {
+    const ss = RAW_MATERIALS.sus304_plate;
+    const ssWeightKg = 0.22; // 220g 304 per unit
+    rows.push({
+      seq: seq++,
+      partNo: `NK-MAT-${seq}`,
+      category: 'steel',
+      name: ss.name,
+      spec: ss.spec,
+      qty: ssWeightKg,
+      unit: 'kg',
+      unitPrice: ss.price,
+      amount: ssWeightKg * ss.price,
+      stock: ss.stock,
+      source: '大宗钢卷库存'
+    });
+  }
+
+  // 3. Silicone Gasket
+  if (!isBag) {
+    const sil = RAW_MATERIALS.lsr_silicone;
+    const silKg = 0.045; // 45g platinum silicone
+    rows.push({
+      seq: seq++,
+      partNo: `NK-MAT-${seq}`,
+      category: 'silicone',
+      name: sil.name,
+      spec: sil.spec,
+      qty: silKg,
+      unit: 'kg',
+      unitPrice: sil.price,
+      amount: silKg * sil.price,
+      stock: sil.stock,
+      source: '食品级铂金胶'
+    });
+  }
+
+  // 4. TPE Drop-proof Corners
+  if (!isBag && !isWheat) {
+    const tpe = RAW_MATERIALS.tpe_resin;
+    const tpeKg = 0.035; // 35g
+    rows.push({
+      seq: seq++,
+      partNo: `NK-MAT-${seq}`,
+      category: 'tpe',
+      name: tpe.name,
+      spec: tpe.spec,
+      qty: tpeKg,
+      unit: 'kg',
+      unitPrice: tpe.price,
+      amount: tpeKg * tpe.price,
+      stock: tpe.stock,
+      source: '双色注塑包胶'
+    });
+  }
+
+  // 5. Custom Color Masterbatch
+  const col = RAW_MATERIALS.pantone_color;
+  const colKg = 0.012; // 12g
+  rows.push({
+    seq: seq++,
+    partNo: `NK-MAT-${seq}`,
+    category: 'color',
+    name: col.name,
+    spec: `${values.customColor}`,
+    qty: colKg,
+    unit: 'kg',
+    unitPrice: col.price,
+    amount: colKg * col.price,
+    stock: col.stock,
+    source: 'Pantone 定制调色'
+  });
+
+  // 6. Individual Packaging Gift Box
+  const gbox = RAW_MATERIALS.gift_box;
+  rows.push({
+    seq: seq++,
+    partNo: `NK-MAT-${seq}`,
+    category: 'pkg',
+    name: gbox.name,
+    spec: '单套瓦楞彩盒',
+    qty: 1,
+    unit: '件',
+    unitPrice: gbox.price,
+    amount: 1 * gbox.price,
+    stock: gbox.stock,
+    source: '环保高档纸品'
+  });
+
+  // 7. PE inner dust bag
+  const pbag = RAW_MATERIALS.poly_bag;
+  rows.push({
+    seq: seq++,
+    partNo: `NK-MAT-${seq}`,
+    category: 'pkg',
+    name: pbag.name,
+    spec: '食品接触认证',
+    qty: 1,
+    unit: '件',
+    unitPrice: pbag.price,
+    amount: 1 * pbag.price,
+    stock: pbag.stock,
+    source: '防尘独立套袋'
+  });
+
+  // 8. Outer Master Carton (Amortized per unit)
+  const ctn = RAW_MATERIALS.export_carton;
+  const pcsPerCtn = values.carton.pcs || 24;
+  const ctnAmortPrice = ctn.price / pcsPerCtn;
+  rows.push({
+    seq: seq++,
+    partNo: `NK-MAT-${seq}`,
+    category: 'pkg',
+    name: ctn.name,
+    spec: `${values.carton.l}×${values.carton.w}×${values.carton.h}cm (${pcsPerCtn}只/箱平摊)`,
+    qty: 1,
+    unit: '件',
+    unitPrice: ctnAmortPrice,
+    amount: ctnAmortPrice,
+    stock: ctn.stock,
+    source: '5层加硬出口箱'
+  });
+
+  const materialCost = rows.reduce((acc, r) => acc + r.amount, 0);
+  const stockCount = rows.filter(r => r.stock).length;
+  const stockRatio = Math.round((stockCount / rows.length) * 100);
+
+  return {
+    rows,
+    totals: { materialCost, itemCount: rows.length, stockRatio }
+  };
+}
+
+/* --- M4: Process Routing & Labor Hours --- */
+function calculateProcess(values, overrides = {}) {
+  const steps = PROCESS_ROUTES.map((route, i) => {
+    const ov = overrides[route.code] || {};
+    const setupMin = ov.setupMin !== undefined ? ov.setupMin : route.setupMin;
+    const cycleSec = ov.cycleSec !== undefined ? ov.cycleSec : route.cycleSec;
+    const workMinPerPiece = cycleSec / 60;
+    const rateHr = route.machineRateHr;
+    const costPerPiece = (workMinPerPiece / 60) * rateHr;
+
+    return {
+      seq: (i + 1) * 10,
+      code: route.code,
+      name: route.name,
+      desc: route.desc,
+      keyNode: route.keyNode,
+      setupMin,
+      cycleSec,
+      workMinPerPiece,
+      machineRateHr: rateHr,
+      costPerPiece
+    };
+  });
+
+  const totalCycleSec = steps.reduce((sum, s) => sum + s.cycleSec, 0);
+  const totalSetupMin = steps.reduce((sum, s) => sum + s.setupMin, 0);
+  const totalLaborCost = steps.reduce((sum, s) => sum + s.costPerPiece, 0);
+
+  return {
+    steps,
+    summary: {
+      totalCycleSec,
+      totalSetupMin,
+      totalLaborCost,
+      cycleMin: totalCycleSec / 60
+    },
+    calibrated: Object.keys(overrides).length > 0
+  };
+}
+
+/* --- M5: Dynamic Costing & Tiered Quotations --- */
+function calculateCostAndTiers(bom, proc, values, opts = {}) {
+  const profitRate = (opts.profitRate || state.profitRate) / 100;
+  const co = state.costOverrides || {};
+
+  // Direct costs
+  const matCost = co.matCost !== undefined ? co.matCost : bom.totals.materialCost;
+  const laborCost = co.laborCost !== undefined ? co.laborCost : proc.summary.totalLaborCost;
+
+  // Overhead & Packaging/Haulage
+  const overheadRate = 0.10; // 10% 工厂管理与能耗折旧
+  const freightPortRate = 0.04; // 4% 厦门集港与出口报关运杂费
+
+  const overheadCost = co.overheadCost !== undefined ? co.overheadCost : (matCost + laborCost) * overheadRate;
+  const freightPortCost = co.freightCost !== undefined ? co.freightCost : matCost * freightPortRate;
+
+  const totalCostBase = matCost + laborCost + overheadCost + freightPortCost;
+
+  // Tiered Quantities (1,000 / 3,000 / 5,000 / 10,000)
+  const tiers = [1000, 3000, 5000, 10000];
+  const tierRows = tiers.map((qty, idx) => {
+    // Volume discount on setup time and material purchasing power
+    const setupAmortMin = proc.summary.totalSetupMin / qty;
+    const setupAmortCost = (setupAmortMin / 60) * 110;
+
+    const matDisc = idx === 0 ? 0 : Math.min(0.08, idx * 0.025);
+    const profitMarginAdj = idx === 0 ? 0 : Math.min(0.05, idx * 0.015);
+    const effProfit = Math.max(0.12, profitRate - profitMarginAdj);
+
+    const unitMatCost = matCost * (1 - matDisc);
+    const unitLabor = laborCost + setupAmortCost;
+    const unitTotalCost = unitMatCost + unitLabor + overheadCost + freightPortCost;
+
+    const unitPriceCny = unitTotalCost / (1 - effProfit);
+    const unitPriceUsd = unitPriceCny / state.usdRate;
+    const extendedUsd = unitPriceUsd * qty;
+    const extendedCny = unitPriceCny * qty;
+
+    return {
+      qty,
+      unitMatCost,
+      unitLabor,
+      unitTotalCost,
+      unitPriceCny,
+      unitPriceUsd,
+      extendedUsd,
+      extendedCny,
+      profitPct: Math.round(effProfit * 100),
+      leadDays: idx === 0 ? 20 : 20 + idx * 2
+    };
+  });
+
+  return {
+    breakdown: {
+      matCost,
+      laborCost,
+      overheadCost,
+      freightPortCost,
+      totalCostBase
+    },
+    tierRows,
+    currency: 'USD',
+    exchangeRate: state.usdRate
+  };
+}
+
+/* --- M6: Technical Response Package (Email & Quotation Sheet) --- */
+function buildResponsePackage(scheme) {
+  const v = scheme.values;
+  const cost = scheme.cost;
+  const quoteNo = `NK-QT-${new Date().toISOString().slice(0, 10).replace(/-/g, '')}-${Math.floor(Math.random() * 900 + 100)}`;
+
+  const tierLines = cost.tierRows.map(t =>
+    `  • Quantity: ${t.qty.toLocaleString()} pcs -> FOB Xiamen: USD $${t.unitPriceUsd.toFixed(2)} / pc (Total: USD $${t.extendedUsd.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})})`
+  ).join('\n');
+
+  const textBody = `Dear Valued Partner,
+
+Thank you for your inquiry regarding our OEM/ODM Bento & Food Container solutions.
+Based on your specifications, Jinjiang Naike Gifts Co., Ltd. (Naike Tableware / www.custombentofactory.com) is pleased to provide the official factory quotation as below:
+
+============================================================
+QUOTATION NO.: ${quoteNo}
+PRODUCT: ${v.nameEn} (${v.name})
+SKU: ${v.sku}
+FACTORY AUDITS: Disney FAMA (W128-4829-1) | Coca-Cola SGP | Sedex SMETA | ISO 9001
+============================================================
+
+1. PRODUCT SPECIFICATIONS
+------------------------------------------------------------
+• Dimensions: ${v.length} × ${v.width} × ${v.height} mm
+• Capacity / Portions: ${v.volMl} ml · ${v.compartments} Compartments
+• Food-Contact Material: ${v.material}
+• Sealing System: ${v.sealType}
+• Custom Colorway: ${v.customColor}
+• Logo Imprint Process: ${v.logoProcess}
+• Food Safety Standards: Complies with US FDA 21 CFR 177.1520, German LFGB §30/31, EU 10/2011, BPA Free
+• Export Packing: ${v.carton.pcs} pcs/ctn, Carton Size: ${v.carton.l}×${v.carton.w}×${v.carton.h} cm, Gross Weight: ${v.carton.gw} kg
+
+2. TIERED FACTORY QUOTATION (FOB XIAMEN PORT, USD)
+------------------------------------------------------------
+${tierLines}
+
+3. PRODUCTION LEAD TIME
+------------------------------------------------------------
+• In-stock pre-production samples: 24 - 48 hours
+• Mass production: 20 - 25 business days upon deposit & sample sign-off
+
+4. COMMERCIAL TERMS
+------------------------------------------------------------
+• Payment Terms: 30% T/T deposit upon order confirmation, 70% balance before shipment against B/L copy
+• Port of Loading: Xiamen Port (XMN), China (Factory warehouse is 60km to port)
+• Quotation Validity: 30 Days
+
+The attached engineering drawing and formal proforma sheet detail the leakproof tolerances and packing metrics. Please let us know your preferred quantity tier so we can courier prototype samples to your office.
+
+Best regards,
+
+Overseas B2B Sales Department
+JINJIANG NAIKE GIFTS CO., LTD. (Naike Tableware)
+No. 18, Zidong Industrial Zone, Neikeng Town, Jinjiang, Quanzhou, Fujian, China
+Email: info@naikegroup.com | WhatsApp: +86 135 9922 0505
+Website: https://www.custombentofactory.com`;
+
+  const subject = `Official Quotation ${quoteNo}: ${v.nameEn} - Naike Tableware`;
+  const mailto = `mailto:${encodeURIComponent(state.to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(textBody)}`;
+
+  return {
+    quoteNo,
+    subject,
+    textBody,
+    mailto
+  };
+}
+
+/* --- Run Full Scheme Calculation --- */
+function executeScheme() {
+  const m1 = parseInquiry(state.text, state.form, state.categoryId);
+  state.values = m1.values;
+  state.params = m1.params;
+  state.issues = m1.issues;
+
+  const svg = generateSvgBlueprint(state.values);
+  const bom = calculateBom(state.values);
+  const process = calculateProcess(state.values, state.processOverrides);
+  const cost = calculateCostAndTiers(bom, process, state.values, { profitRate: state.profitRate });
+  const responsePkg = buildResponsePackage({ values: state.values, cost });
+
+  state.scheme = {
+    values: state.values,
+    params: state.params,
+    issues: state.issues,
+    svg,
+    bom,
+    process,
+    cost,
+    responsePkg,
+    quoteNo: responsePkg.quoteNo
+  };
+
+  state.dirty = false;
+}
+
+/* ==========================================================================
+   VIEW RENDERING & TAB CONTROLS
+   ========================================================================== */
+
+function modStatus(n) {
+  if (n === 1) return '';
+  if (!state.scheme) return '<span class="mod-flag empty" title="未计算">○</span>';
+  if (state.dirty) return '<span class="mod-flag stale" title="参数已变更，待重新计算">↻</span>';
+  return '<span class="mod-flag done" title="已计算">✓</span>';
+}
+
+function renderMods() {
+  $('mods').innerHTML = MODULES.map(m => `
+    <div class="step-item ${m.n === state.tab ? 'active' : ''}" data-step="${m.n}">
+      <div class="step-num">${m.n}</div>
+      <div class="step-txt"><b>${m.t}</b><span>${m.s}</span></div>
+      ${modStatus(m.n)}
+    </div>
+  `).join('');
+
+  document.querySelectorAll('.step-item').forEach(el => {
+    el.addEventListener('click', () => setTab(Number(el.dataset.step)));
+  });
+}
+
+function renderTopbar() {
+  const m = MODULES[state.tab - 1];
+  $('stepTitle').textContent = `${m.n}. ${m.t}`;
+  $('stepSubtitle').textContent = m.s;
+  $('topbarActions').innerHTML = state.scheme
+    ? `<span class="badge badge-info" style="font-size:12px; padding:4px 10px;"><i class="fa-solid fa-file-invoice-dollar"></i> 报价单号 ${esc(state.scheme.quoteNo)}</span>`
+    : '';
+}
+
+function setTab(n) {
+  state.tab = n;
+  renderMods();
+  renderTopbar();
+  renderTabContent();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function markDirty() {
+  if (state.scheme && !state.dirty) {
+    state.dirty = true;
+    renderMods();
+    renderTabContent();
+  }
+}
+
+function renderTabContent() {
+  const content = $('content');
+  $('staleBanner').innerHTML = (state.dirty && state.tab >= 2 && state.scheme)
+    ? `<div class="alert alert-warn stale-banner">
+         <span><i class="fa-solid fa-arrows-rotate"></i> 参数或成本已发生修改，当前展示为旧方案。</span>
+         <button class="btn btn-primary btn-sm" id="btnRecalcNow">立即重新计算全案</button>
+       </div>`
+    : '';
+
+  if ($('btnRecalcNow')) {
+    $('btnRecalcNow').addEventListener('click', () => {
+      executeScheme();
+      toast('全案已按新参数重新核算完成！');
+      renderMods();
+      renderTopbar();
+      renderTabContent();
+    });
+  }
+
+  if (state.tab === 1) renderTab1(content);
+  else if (!state.scheme) {
+    content.innerHTML = `
+      <div class="card">
+        <div class="alert alert-info">
+          尚未计算核价方案。请在 <b>1. 参数标准化与补全</b> 录入买家询盘信息，并点击 <b>「⚙ 计算全套核价方案」</b>。
+        </div>
+        <button class="btn btn-primary" id="btnGoCalc"><i class="fa-solid fa-calculator"></i> 立即执行全流程核算</button>
+      </div>
+    `;
+    $('btnGoCalc').addEventListener('click', () => {
+      executeScheme();
+      toast('方案核算成功！');
+      renderMods();
+      renderTopbar();
+      renderTabContent();
+    });
+  }
+  else if (state.tab === 2) renderTab2(content);
+  else if (state.tab === 3) renderTab3(content);
+  else if (state.tab === 4) renderTab4(content);
+  else if (state.tab === 5) renderTab5(content);
+  else if (state.tab === 6) renderTab6(content);
+}
+
+/* ---------- TAB 1: PARAMETER STANDARDIZATION ---------- */
+function renderTab1(content) {
+  const srcBadge = {
+    'customer': ['badge-customer', '买家输入'],
+    'ai': ['badge-ai', 'AI/模具推荐'],
+    'default': ['badge-default', '耐科标准'],
+    'missing': ['badge-missing', '必填缺失']
+  };
+
+  const v = state.values || NAIKE_CATEGORIES[0];
+  const catOptions = NAIKE_CATEGORIES.map(c => `
+    <option value="${c.id}" ${state.categoryId === c.id ? 'selected' : ''}>
+      ${c.sku} · ${c.name} (${c.nameEn})
+    </option>
+  `).join('');
+
+  content.innerHTML = `
+    <div class="grid2">
+      <div class="card">
+        <h3><span class="dot"></span>海外买家询盘自然语言输入 (NLP Parser)</h3>
+        <label class="fld" style="margin-bottom:10px">
+          粘贴买家邮件、询盘原话或业务需求描述：
+          <textarea id="inText" placeholder="例如：我们需要定制3000套儿童5格防漏盒，Pantone 320C薄荷绿，丝印Logo，独立彩盒，FOB厦门港">${esc(state.text)}</textarea>
+        </label>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
+          ${DEMOS.map((d, i) => `<button class="btn btn-secondary btn-sm" data-demo="${i}">询盘用例 ${i + 1}</button>`).join('')}
+          <button class="btn btn-primary btn-sm" id="btnParseText"><i class="fa-solid fa-wand-magic-sparkles"></i> 智能提取规格</button>
+        </div>
+
+        <h3 style="margin-top:16px;"><span class="dot"></span>基准产品品类与模具模板</h3>
+        <label class="fld">选择耐科现模标准品类：
+          <select id="selCategory">${catOptions}</select>
+        </label>
+      </div>
+
+      <div>
+        <div class="card">
+          <h3><span class="dot"></span>产品制造与定制参数调整</h3>
+          <div class="form-grid">
+            <label class="fld">采购套数 (MOQ 1000)
+              <input type="number" id="fQty" value="${v.qty || 3000}" step="500">
+            </label>
+            <label class="fld">容积 (ml)
+              <input type="number" id="fVol" value="${v.volMl || 1000}">
+            </label>
+            <label class="fld">分格数量
+              <input type="number" id="fComp" value="${v.compartments || 5}">
+            </label>
+            <label class="fld">长度 L (mm)
+              <input type="number" id="fL" value="${v.length || 215}">
+            </label>
+            <label class="fld">宽度 W (mm)
+              <input type="number" id="fW" value="${v.width || 165}">
+            </label>
+            <label class="fld">高度 H (mm)
+              <input type="number" id="fH" value="${v.height || 50}">
+            </label>
+            <label class="fld">定制色号
+              <input type="text" id="fCol" value="${v.customColor || 'Pantone 320C'}">
+            </label>
+            <label class="fld">Logo 工艺
+              <select id="fLogo">
+                <option value="丝网印刷 (单色)" ${v.logoProcess === '丝网印刷 (单色)' ? 'selected' : ''}>丝网印刷 (单色)</option>
+                <option value="激光打标 (防刮)" ${v.logoProcess === '激光打标 (防刮)' ? 'selected' : ''}>激光打标 (防刮)</option>
+                <option value="热转印 (全彩照片级)" ${v.logoProcess === '热转印 (全彩照片级)' ? 'selected' : ''}>热转印 (全彩照片级)</option>
+                <option value="无印刷 / 纯素色" ${v.logoProcess === '无印刷 / 纯素色' ? 'selected' : ''}>无印刷 / 纯素色</option>
+              </select>
+            </label>
+          </div>
+          <div class="alert alert-info" style="margin-top:14px; margin-bottom:0;">
+            <i class="fa-solid fa-circle-info"></i>
+            耐科工程知识库已将注塑壁厚、LSR 铂金硅胶圈截面、锁扣抗折弯疲劳（>10,000次）与出口外箱规格自动绑定联动。
+          </div>
+        </div>
+        ${state.issues.length ? `<div class="alert alert-warn">${state.issues.map(i => `<div>⚠ ${esc(i)}</div>`).join('')}</div>` : ''}
+      </div>
+    </div>
+
+    ${state.params.length ? `
+      <div class="card">
+        <h3><span class="dot"></span>结构化制造规格参数清单 (可追溯源头)</h3>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th style="width:20%">参数项目</th>
+                <th style="width:25%">确定性工程规格</th>
+                <th style="width:10%">单位</th>
+                <th style="width:15%">数据来源</th>
+                <th>工厂工程说明</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${state.params.map(p => {
+                const [cls, tag] = srcBadge[p.source] || ['badge-default', p.source];
+                return `
+                  <tr>
+                    <td><b>${esc(p.label)}</b></td>
+                    <td><b>${esc(p.value)}</b></td>
+                    <td>${esc(p.unit)}</td>
+                    <td><span class="badge ${cls}">${tag}</span></td>
+                    <td style="color:#64748b; font-size:12px;">${esc(p.note)}</td>
+                  </tr>
+                `;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    ` : ''}
+  `;
+
+  // Bind inputs
+  $('inText').addEventListener('input', e => { state.text = e.target.value; markDirty(); });
+  $('selCategory').addEventListener('change', e => {
+    state.categoryId = e.target.value;
+    const m = parseInquiry(state.text, {}, state.categoryId);
+    state.values = m.values;
+    state.params = m.params;
+    markDirty();
+    renderTab1(content);
+  });
+
+  document.querySelectorAll('[data-demo]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = Number(btn.dataset.demo);
+      state.text = DEMOS[idx];
+      $('inText').value = state.text;
+      const m = parseInquiry(state.text, {}, null);
+      state.categoryId = m.values.categoryId;
+      state.values = m.values;
+      state.params = m.params;
+      markDirty();
+      renderTab1(content);
+      toast('已载入用例并提取参数！');
+    });
+  });
+
+  $('btnParseText').addEventListener('click', () => {
+    const m = parseInquiry($('inText').value, collectForm(), state.categoryId);
+    state.values = m.values;
+    state.params = m.params;
+    state.issues = m.issues;
+    markDirty();
+    renderTab1(content);
+    toast('自然语言规格提取成功！');
+  });
+
+  ['fQty', 'fVol', 'fComp', 'fL', 'fW', 'fH', 'fCol', 'fLogo'].forEach(id => {
+    const el = $(id);
+    if (el) el.addEventListener('input', () => { collectForm(); markDirty(); });
+  });
+}
+
+function collectForm() {
+  state.form = {
+    qty: Number($('fQty')?.value || 3000),
+    volMl: Number($('fVol')?.value || 1000),
+    compartments: Number($('fComp')?.value || 5),
+    length: Number($('fL')?.value || 215),
+    width: Number($('fW')?.value || 165),
+    height: Number($('fH')?.value || 50),
+    customColor: $('fCol')?.value || 'Pantone 320C',
+    logoProcess: $('fLogo')?.value || '丝网印刷 (单色)'
+  };
+  return state.form;
+}
+
+/* ---------- TAB 2: VISUAL 2D BLUEPRINT ---------- */
+function renderTab2(content) {
+  const s = state.scheme;
+  const v = s.values;
+
+  content.innerHTML = `
+    <div class="grid2">
+      <div class="card">
+        <h3><span class="dot"></span>2D 结构工程截面图 (含关键密封与尺寸标注)</h3>
+        <div class="svg-stage">${s.svg}</div>
+        <div class="chip-row">
+          <span class="chip">尺寸 <b>${v.length}×${v.width}×${v.height}mm</b></span>
+          <span class="chip">容量 <b>${v.volMl}ml</b></span>
+          <span class="chip">分格 <b>${v.compartments}格分装</b></span>
+          <span class="chip">气密 <b>LSR液态硅胶圈</b></span>
+          <span class="chip">防摔 <b>TPE加厚护角</b></span>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <h3><span class="dot"></span>实物产品与模具细节对比</h3>
+          <div style="display:flex; gap:16px; align-items:center; margin-bottom:12px;">
+            <img src="${v.img}" alt="${v.name}" style="width:120px; height:120px; object-fit:cover; border-radius:8px; border:1px solid var(--line);">
+            <div>
+              <div style="font-size:16px; font-weight:800; color:var(--brand-teal);">${esc(v.name)}</div>
+              <div style="font-size:12px; color:var(--ink-2); margin-top:2px;">${esc(v.nameEn)}</div>
+              <div style="font-size:12px; color:var(--ink-3); font-family:var(--mono); margin-top:4px;">SKU: ${esc(v.sku)}</div>
+              <div class="badge badge-info" style="margin-top:6px;"><i class="fa-solid fa-award"></i> Bentgo 同级欧美商超热销款</div>
+            </div>
+          </div>
+
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <tbody>
+                <tr><td>主材质配方</td><td><b>${esc(v.material)}</b></td></tr>
+                <tr><td>密封结构</td><td><b>${esc(v.sealType)}</b></td></tr>
+                <tr><td>外箱装箱规格</td><td><b>${v.carton.pcs} pcs/箱 · ${v.carton.l}×${v.carton.w}×${v.carton.h}cm</b></td></tr>
+                <tr><td>单箱出口毛重</td><td><b>${v.carton.gw} kg / 箱</b></td></tr>
+                <tr><td>海运整箱体积</td><td><b>${((v.carton.l * v.carton.w * v.carton.h) / 1e6).toFixed(3)} m³ / 箱</b></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* ---------- TAB 3: BOM MATERIAL BREAKDOWN ---------- */
+function renderTab3(content) {
+  const s = state.scheme;
+  const bom = s.bom;
+
+  content.innerHTML = `
+    <div class="grid3">
+      <div class="stat accent">
+        <div class="k">单套直接材料成本 (BOM)</div>
+        <div class="v">¥${fmt(bom.totals.materialCost)} <small>CNY</small></div>
+      </div>
+      <div class="stat">
+        <div class="k">BOM 零部件及辅料项数</div>
+        <div class="v">${bom.totals.itemCount} <small>项</small></div>
+      </div>
+      <div class="stat">
+        <div class="k">工厂现存常备料覆盖率</div>
+        <div class="v">${bom.totals.stockRatio} <small>%</small></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>
+        <span class="dot"></span>完整 BOM 物料清单
+        <span class="badge badge-info"><i class="fa-solid fa-link"></i> 单价可直接修改（模拟与 ERP 实时拉价，改后联动总成本）</span>
+      </h3>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>物料编码</th>
+              <th>物料名称</th>
+              <th>材料规格及配方</th>
+              <th>单套定额用量</th>
+              <th>单位</th>
+              <th>有效采购单价(¥)</th>
+              <th>分项小计(¥)</th>
+              <th>库存储备</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${bom.rows.map((r, idx) => `
+              <tr>
+                <td>${r.seq}</td>
+                <td style="font-family:var(--mono); color:#64748b;">${esc(r.partNo)}</td>
+                <td><b>${esc(r.name)}</b></td>
+                <td>${esc(r.spec)}</td>
+                <td class="num">${r.qty}</td>
+                <td>${esc(r.unit)}</td>
+                <td>
+                  <input type="number" step="0.1" style="width:80px; padding:3px 6px;" data-mat-idx="${idx}" value="${r.unitPrice.toFixed(2)}">
+                </td>
+                <td class="num"><b>¥${fmt(r.amount)}</b></td>
+                <td><span class="badge ${r.stock ? 'badge-stock' : 'badge-order'}">${r.stock ? '常备现货' : '定制订购'}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll('input[data-mat-idx]').forEach(inp => {
+    inp.addEventListener('change', () => {
+      const idx = Number(inp.dataset.matIdx);
+      const val = parseFloat(inp.value) || 0;
+      bom.rows[idx].unitPrice = val;
+      bom.rows[idx].amount = bom.rows[idx].qty * val;
+      bom.totals.materialCost = bom.rows.reduce((sum, r) => sum + r.amount, 0);
+
+      // Re-run costing cascade
+      state.scheme.cost = calculateCostAndTiers(bom, state.scheme.process, state.values, { profitRate: state.profitRate });
+      state.scheme.responsePkg = buildResponsePackage(state.scheme);
+      toast(`物料单价已更新，总材料成本重算为 ¥${fmt(bom.totals.materialCost)}`);
+      renderTab3(content);
+    });
+  });
+}
+
+/* ---------- TAB 4: MANUFACTURING PROCESS & LABOR ---------- */
+function renderTab4(content) {
+  const s = state.scheme;
+  const p = s.process;
+
+  content.innerHTML = `
+    <div class="grid3">
+      <div class="stat accent">
+        <div class="k">单件生产工时与机时成本</div>
+        <div class="v">¥${fmt(p.summary.totalLaborCost)} <small>CNY</small></div>
+      </div>
+      <div class="stat">
+        <div class="k">全流程制造节拍合计</div>
+        <div class="v">${p.summary.totalCycleSec} <small>秒/只</small></div>
+      </div>
+      <div class="stat">
+        <div class="k">整批换型调机准备时间</div>
+        <div class="v">${p.summary.totalSetupMin} <small>分钟</small></div>
+      </div>
+    </div>
+
+    ${p.calibrated ? '<div class="alert alert-ok"><i class="fa-solid fa-check-circle"></i> 已应用车间人工校准节拍，工时已重算。</div>' : ''}
+
+    <div class="card">
+      <h3>
+        <span class="dot"></span>注塑及装配工艺路线卡
+        <span class="badge badge-info">工序换型时间与生产节拍可人工微调</span>
+      </h3>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>工序号</th>
+              <th>工序名称</th>
+              <th>工艺要求与设备规格</th>
+              <th>换型准备 (min)</th>
+              <th>生产节拍 (秒/只)</th>
+              <th>设备机时费率 (¥/h)</th>
+              <th>单只分摊制造费 (¥)</th>
+              <th>工艺属性</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${p.steps.map((st, idx) => `
+              <tr>
+                <td>${st.seq}</td>
+                <td><b>${esc(st.name)}</b> <span style="font-size:10px; color:#94a3b8;">${esc(st.code)}</span></td>
+                <td style="font-size:12px; color:#475569;">${esc(st.desc)}</td>
+                <td>
+                  <input type="number" step="5" min="0" style="width:65px; padding:3px 6px;" class="proc-setup" data-idx="${idx}" value="${st.setupMin}">
+                </td>
+                <td>
+                  <input type="number" step="1" min="1" style="width:65px; padding:3px 6px;" class="proc-cycle" data-idx="${idx}" value="${st.cycleSec}">
+                </td>
+                <td class="num">¥${st.machineRateHr}/h</td>
+                <td class="num"><b>¥${st.costPerPiece.toFixed(3)}</b></td>
+                <td class="ctr">${st.keyNode ? '<span class="badge badge-key">关键瓶颈</span>' : '普通工序'}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+
+      <div style="display:flex; gap:8px; margin-top:14px; align-items:center;">
+        <button class="btn btn-primary btn-sm" id="btnApplyProcess"><i class="fa-solid fa-check"></i> 应用校准参数并重算全案</button>
+        <button class="btn btn-secondary btn-sm" id="btnResetProcess"><i class="fa-solid fa-rotate-left"></i> 恢复标准节拍</button>
+        <span style="font-size:12px; color:#64748b;">注塑成型工时受模具穴数与壁厚冷却周期制约，调大批量可摊薄换型开机损耗。</span>
+      </div>
+    </div>
+  `;
+
+  $('btnApplyProcess').addEventListener('click', () => {
+    const ov = {};
+    document.querySelectorAll('.proc-setup').forEach(inp => {
+      const idx = Number(inp.dataset.idx);
+      const code = p.steps[idx].code;
+      ov[code] = ov[code] || {};
+      ov[code].setupMin = parseFloat(inp.value) || 0;
+    });
+    document.querySelectorAll('.proc-cycle').forEach(inp => {
+      const idx = Number(inp.dataset.idx);
+      const code = p.steps[idx].code;
+      ov[code] = ov[code] || {};
+      ov[code].cycleSec = parseFloat(inp.value) || 0;
+    });
+    state.processOverrides = ov;
+    executeScheme();
+    toast('工时与制造费已按新节拍重新计算！');
+    renderTab4(content);
+  });
+
+  $('btnResetProcess').addEventListener('click', () => {
+    state.processOverrides = {};
+    executeScheme();
+    toast('已恢复标准工艺节拍！');
+    renderTab4(content);
+  });
+}
+
+/* ---------- TAB 5: DYNAMIC COSTING & TIERED QUOTATION ---------- */
+function renderTab5(content) {
+  const s = state.scheme;
+  const cost = s.cost;
+  const b = cost.breakdown;
+  const co = state.costOverrides || {};
+
+  content.innerHTML = `
+    <div class="grid2">
+      <!-- Left: Internal Cost Accounting -->
+      <div class="card">
+        <h3><span class="dot"></span>耐科工厂内部成本核算明细 (单只基准)</h3>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <tbody>
+              <tr>
+                <td style="width:50%"><b>直接原料成本 (BOM)</b><br><span style="font-size:11px; color:#64748b;">高抗冲食品PP、硅胶、纸箱包材</span></td>
+                <td class="num">¥${fmt(b.matCost)}</td>
+              </tr>
+              <tr>
+                <td><b>注塑机时与人工制造费</b><br><span style="font-size:11px; color:#64748b;">精密注塑、超声波焊接、气密抽检</span></td>
+                <td class="num">¥${fmt(b.laborCost)}</td>
+              </tr>
+              <tr>
+                <td><b>车间管理与设备折旧费 (10%)</b><br><span style="font-size:11px; color:#64748b;">含模具损耗分摊与 Disney 验厂合规</span></td>
+                <td class="num">¥${fmt(b.overheadCost)}</td>
+              </tr>
+              <tr>
+                <td><b>出口包装与厦门港集港费 (4%)</b><br><span style="font-size:11px; color:#64748b;">打托缠膜、拖车集港 (60km)</span></td>
+                <td class="num">¥${fmt(b.freightPortCost)}</td>
+              </tr>
+              <tr style="background:#f1f5f9;">
+                <td><b>单只总制造成本合计 (Cost Base)</b></td>
+                <td class="num"><b style="color:var(--brand-teal); font-size:16px;">¥${fmt(b.totalCostBase)}</b></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="margin-top:16px;">
+          <label class="fld">
+            目标外贸利润率: <span id="profitDisplay" style="font-weight:800; color:var(--brand-teal); font-size:15px;">${state.profitRate}%</span>
+            <input type="range" id="rngProfit" min="12" max="35" step="1" value="${state.profitRate}">
+          </label>
+        </div>
+      </div>
+
+      <!-- Right: Tiered FOB Quotation -->
+      <div class="card">
+        <h3><span class="dot"></span>外贸阶梯出口报价矩阵 (FOB Xiamen)</h3>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th>订购梯队</th>
+                <th>单价 (USD $)</th>
+                <th>单价 (CNY ¥)</th>
+                <th>整批总金额 (USD)</th>
+                <th>毛利率</th>
+                <th>交货周期</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${cost.tierRows.map(t => `
+                <tr ${t.qty === 3000 ? 'style="background:#e0f2fe;"' : ''}>
+                  <td><b>${t.qty.toLocaleString()} 套</b> ${t.qty === 3000 ? '<span class="badge badge-info">主推</span>' : ''}</td>
+                  <td class="num"><b style="color:var(--brand-teal); font-size:15px;">$${t.unitPriceUsd.toFixed(2)}</b></td>
+                  <td class="num">¥${t.unitPriceCny.toFixed(2)}</td>
+                  <td class="num" style="font-weight:700;">$${t.extendedUsd.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+                  <td class="num">${t.profitPct}%</td>
+                  <td class="ctr">${t.leadDays} 天</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="alert alert-ok" style="margin-top:14px; margin-bottom:0;">
+          <i class="fa-solid fa-shield-halved"></i>
+          报价含单色丝印 Logo、5 层出口外箱、厦门港拖车报关费。汇率基准按 <b>USD 1 = ¥${state.usdRate}</b> 锁定 30 天。
+        </div>
+      </div>
+    </div>
+
+    <!-- Manual Cost Overrides Panel -->
+    <div class="card" style="border: 1px dashed var(--brand-teal); background:#fcfefe;">
+      <h3><span class="dot"></span>业务员成本手动调整面板 (可直接改动，留空=按算法全自动)</h3>
+      <div class="form-grid">
+        <label class="fld">材料成本覆盖 (¥/套)
+          <input type="number" step="0.5" id="coMat" placeholder="自动计算值: ${b.matCost.toFixed(2)}" value="${co.matCost ?? ''}">
+        </label>
+        <label class="fld">制造工时费覆盖 (¥/套)
+          <input type="number" step="0.5" id="coLabor" placeholder="自动计算值: ${b.laborCost.toFixed(2)}" value="${co.laborCost ?? ''}">
+        </label>
+        <label class="fld">管理费用覆盖 (¥/套)
+          <input type="number" step="0.5" id="coOverhead" placeholder="自动计算值: ${b.overheadCost.toFixed(2)}" value="${co.overheadCost ?? ''}">
+        </label>
+        <label class="fld">包装集港运费 (¥/套)
+          <input type="number" step="0.2" id="coFreight" placeholder="自动计算值: ${b.freightPortCost.toFixed(2)}" value="${co.freightCost ?? ''}">
+        </label>
+      </div>
+      <div style="display:flex; gap:8px; margin-top:12px;">
+        <button class="btn btn-primary btn-sm" id="btnApplyCost"><i class="fa-solid fa-check"></i> 应用手动成本并重新计算报价</button>
+        <button class="btn btn-secondary btn-sm" id="btnResetCost"><i class="fa-solid fa-rotate-left"></i> 恢复纯自动核算</button>
+      </div>
+    </div>
+  `;
+
+  $('rngProfit').addEventListener('input', e => {
+    state.profitRate = Number(e.target.value);
+    $('profitDisplay').textContent = `${state.profitRate}%`;
+  });
+  $('rngProfit').addEventListener('change', () => {
+    executeScheme();
+    renderTab5(content);
+  });
+
+  $('btnApplyCost').addEventListener('click', () => {
+    const valOf = id => {
+      const v = $(id).value.trim();
+      return v === '' ? undefined : Number(v);
+    };
+    state.costOverrides = {
+      matCost: valOf('coMat'),
+      laborCost: valOf('coLabor'),
+      overheadCost: valOf('coOverhead'),
+      freightCost: valOf('coFreight')
+    };
+    executeScheme();
+    toast('已应用手动成本并更新阶梯报价！');
+    renderTab5(content);
+  });
+
+  $('btnResetCost').addEventListener('click', () => {
+    state.costOverrides = {};
+    executeScheme();
+    toast('已恢复工厂算法自动核价！');
+    renderTab5(content);
+  });
+}
+
+/* ---------- TAB 6: TECHNICAL RESPONSE PACKAGE & PROPOSAL EXPORT ---------- */
+function renderTab6(content) {
+  const s = state.scheme;
+  const pkg = s.responsePkg;
+
+  content.innerHTML = `
+    <div class="grid2">
+      <!-- Left: Email Draft -->
+      <div class="card">
+        <h3><span class="dot"></span>英文商务外贸报价邮件草稿 (B2B Quotation Email)</h3>
+        <label class="fld" style="margin-bottom:8px;">海外客户接收邮箱：
+          <input type="text" id="inEmailTo" value="${esc(state.to)}">
+        </label>
+        <div class="email-pane">
+          <div class="email-meta">
+            <b>Subject:</b> ${esc(pkg.subject)}<br>
+            <b>To:</b> ${esc(state.to)}
+          </div>
+          <pre class="email-body" id="emailBodyPre">${esc(pkg.textBody)}</pre>
+        </div>
+        <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" id="btnCopyEmail"><i class="fa-solid fa-copy"></i> 复制完整邮件正文</button>
+          <button class="btn btn-secondary btn-sm" id="btnOpenMailto"><i class="fa-solid fa-envelope"></i> 调起 Outlook / 邮件客户端</button>
+          <button class="btn btn-secondary btn-sm" id="btnDownloadEml"><i class="fa-solid fa-file-arrow-down"></i> 下载 .eml 邮件文件</button>
+        </div>
+      </div>
+
+      <!-- Right: Formal Proforma Sheet & Checklist -->
+      <div>
+        <div class="card">
+          <h3><span class="dot"></span>外贸形式报价单 (Proforma Quotation Sheet)</h3>
+          <p style="color:#64748b; font-size:12.5px; margin-bottom:12px;">
+            整合耐科工厂资质（Disney FAMA、Coca-Cola SGP）、2D 截面结构图、阶梯价格矩阵、外箱物流规格与付款条款，一键生成出版级方案单。
+          </p>
+          <button class="btn btn-primary" id="btnPrintProposal" style="width:100%; padding:12px;">
+            <i class="fa-solid fa-print"></i> 打印 / 另存为 PDF 报价方案书
+          </button>
+        </div>
+
+        <div class="card">
+          <h3><span class="dot"></span>报价发出前业务质检清单 (Audit Checklist)</h3>
+          <ul style="padding-left:18px; font-size:12.5px; color:#475569; line-height:1.9;">
+            <li><i class="fa-solid fa-check" style="color:var(--ok);"></i> 确认采购数量符合现模最小起订量 (≥1,000 pcs)</li>
+            <li><i class="fa-solid fa-check" style="color:var(--ok);"></i> 确认食品接触安全标准符合目标国市场 (FDA / LFGB / BPA Free)</li>
+            <li><i class="fa-solid fa-check" style="color:var(--ok);"></i> 确认毛利率 (${s.cost.tierRows[1].profitPct}%) 符合外贸大客户谈判底线</li>
+            <li><i class="fa-solid fa-check" style="color:var(--ok);"></i> 确认外箱规格 (${s.values.carton.pcs}只/箱) 与集装箱测算无冲突</li>
+            <li><i class="fa-solid fa-circle-dot" style="color:var(--brand-teal);"></i> 经业务总监审核后即可直接发送客户</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  `;
+
+  $('inEmailTo').addEventListener('input', e => {
+    state.to = e.target.value;
+  });
+
+  $('btnCopyEmail').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(pkg.textBody);
+      toast('邮件正文已成功复制到剪贴板！');
+    } catch {
+      toast('复制失败，请手动选取复制', true);
+    }
+  });
+
+  $('btnOpenMailto').addEventListener('click', () => {
+    window.open(pkg.mailto, '_blank');
+  });
+
+  $('btnDownloadEml').addEventListener('click', () => {
+    const emlContent = `From: info@naikegroup.com\nTo: ${state.to}\nSubject: ${pkg.subject}\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\n\n${pkg.textBody}`;
+    const blob = new Blob([emlContent], { type: 'message/rfc822' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `${pkg.quoteNo}.eml`;
+    a.click();
+    toast('已生成并下载 .eml 邮件草稿');
+  });
+
+  $('btnPrintProposal').addEventListener('click', () => {
+    printProformaInvoice(s);
+  });
+}
+
+/* --- Printable Proforma Invoice Generator --- */
+function printProformaInvoice(scheme) {
+  const w = window.open('', '_blank');
+  if (!w) { alert('浏览器阻止了弹出窗口，请允许弹出后重试'); return; }
+
+  const v = scheme.values;
+  const cost = scheme.cost;
+  const pkg = scheme.responsePkg;
+
+  const html = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <title>Quotation_${pkg.quoteNo}</title>
+      <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #1e293b; padding: 28px; font-size: 13px; line-height: 1.5; }
+        .header { display: flex; justify-content: space-between; border-bottom: 3px solid #008290; padding-bottom: 12px; margin-bottom: 16px; }
+        .comp-title { font-size: 20px; font-weight: 800; color: #008290; }
+        .comp-sub { font-size: 11px; color: #64748b; margin-top: 2px; }
+        .meta-right { text-align: right; font-size: 12px; color: #475569; }
+        .meta-right strong { font-size: 15px; color: #0f172a; }
+        h2 { font-size: 14px; font-weight: 700; color: #0f172a; margin: 16px 0 8px; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 12px; }
+        th, td { border: 1px solid #cbd5e1; padding: 6px 10px; text-align: left; }
+        th { background: #f1f5f9; color: #334155; }
+        td.num { text-align: right; font-family: monospace; }
+        .badge { display: inline-block; padding: 1px 6px; background: #e0f2fe; color: #0369a1; border-radius: 4px; font-size: 10px; font-weight: 600; }
+        .terms-list { font-size: 12px; color: #475569; line-height: 1.8; padding-left: 18px; }
+        .footer { margin-top: 24px; border-top: 1px solid #cbd5e1; padding-top: 12px; display: flex; justify-content: space-between; font-size: 11px; color: #64748b; }
+        @media print { body { padding: 10mm; } }
+      </style>
+    </head>
+    <body>
+      <div class="header">
+        <div>
+          <div class="comp-title">JINJIANG NAIKE GIFTS CO., LTD.</div>
+          <div class="comp-sub">晋江市耐克礼品玩具有限公司 · 官方制造出海工厂 (Naike Tableware)</div>
+          <div class="comp-sub">No. 18, Zidong Industrial Zone, Neikeng Town, Jinjiang, Fujian, China · www.custombentofactory.com</div>
+        </div>
+        <div class="meta-right">
+          <strong>PROFORMA QUOTATION</strong><br>
+          Quote No: <b>${pkg.quoteNo}</b><br>
+          Date: ${new Date().toISOString().slice(0, 10)}<br>
+          Port: Xiamen Port (XMN, China)
+        </div>
+      </div>
+
+      <h2>1. PRODUCT & ENGINEERING SPECIFICATIONS</h2>
+      <table>
+        <tr><td style="width:25%; background:#f8fafc;"><b>Product Model</b></td><td>${v.nameEn} (${v.name}) · SKU: ${v.sku}</td></tr>
+        <tr><td style="background:#f8fafc;"><b>Dimensions & Portions</b></td><td>${v.length} × ${v.width} × ${v.height} mm · ${v.volMl} ml · ${v.compartments} Compartments</td></tr>
+        <tr><td style="background:#f8fafc;"><b>Food-Contact Materials</b></td><td>${v.material} (100% BPA Free)</td></tr>
+        <tr><td style="background:#f8fafc;"><b>Hermetic Seal</b></td><td>${v.sealType} (-50kPa Vacuum Pressure Tested)</td></tr>
+        <tr><td style="background:#f8fafc;"><b>Custom Specifications</b></td><td>Color: ${v.customColor} · Logo: ${v.logoProcess}</td></tr>
+        <tr><td style="background:#f8fafc;"><b>Export Packaging</b></td><td>${v.carton.pcs} pcs/ctn, Size: ${v.carton.l}×${v.carton.w}×${v.carton.h}cm, Gross Weight: ${v.carton.gw} kg</td></tr>
+      </table>
+
+      <h2>2. TIERED PRICING SCHEDULE (FOB XIAMEN PORT, USD)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Tier Quantity</th>
+            <th>FOB Xiamen Unit Price (USD)</th>
+            <th>Extended Total Amount (USD)</th>
+            <th>Production Lead Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${cost.tierRows.map(t => `
+            <tr>
+              <td><b>${t.qty.toLocaleString()} pcs</b></td>
+              <td class="num"><b>$${t.unitPriceUsd.toFixed(2)}</b></td>
+              <td class="num">$${t.extendedUsd.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+              <td>${t.leadDays} Business Days</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+
+      <h2>3. FACTORY QUALIFICATIONS & AUDIT SUMMARY</h2>
+      <table>
+        <tr>
+          <td><span class="badge">Disney FAMA</span> Code: W128-4829-1</td>
+          <td><span class="badge">Coca-Cola SGP</span> Green Tier Social Audit</td>
+          <td><span class="badge">Sedex SMETA</span> 4-Pillar Verified</td>
+          <td><span class="badge">ISO 9001:2015</span> Certified System</td>
+        </tr>
+      </table>
+
+      <h2>4. COMMERCIAL TERMS & CONDITIONS</h2>
+      <ul class="terms-list">
+        <li><strong>Payment Terms:</strong> 30% T/T deposit upon order confirmation; 70% balance before container dispatch against B/L copy.</li>
+        <li><strong>Delivery Terms:</strong> FOB Xiamen Port, China (Incoterms 2020). Factory warehouse is 60km to container port.</li>
+        <li><strong>Price Validity:</strong> This quotation is valid for 30 days from the date of issue based on current resin market prices.</li>
+        <li><strong>Quality Warranty:</strong> 12 months standard factory warranty against manufacturing defects.</li>
+      </ul>
+
+      <div class="footer">
+        <div>Authorized by: <strong>Naike Tableware Overseas Sales Dept.</strong></div>
+        <div>Customer Acceptance Stamp: _______________________</div>
+      </div>
+    </body>
+    </html>
+  `;
+
+  w.document.write(html);
+  w.document.close();
+  w.focus();
+  setTimeout(() => { w.print(); }, 400);
+}
+
+/* ==========================================================================
+   GLOBAL APP BOOTSTRAP
+   ========================================================================== */
+$('btnDemo').addEventListener('click', () => {
+  state.text = DEMOS[0];
+  const m = parseInquiry(state.text, {}, null);
+  state.categoryId = m.values.categoryId;
+  state.values = m.values;
+  state.params = m.params;
+  state.form = {};
+  state.processOverrides = {};
+  state.costOverrides = {};
+  executeScheme();
+  setTab(1);
+  toast('已载入用例 1 并完成全流程核算！');
+});
+
+$('btnCalcAll').addEventListener('click', () => {
+  executeScheme();
+  toast('全套 6 模块核算完成！');
+  renderMods();
+  renderTopbar();
+  renderTabContent();
+});
+
+// Initial boot
+executeScheme();
+renderMods();
+renderTopbar();
+renderTabContent();
+</script>
+</body>
+</html>
